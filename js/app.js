@@ -210,10 +210,10 @@ function montarTabelaMedidas() {
     const tr = document.createElement("tr");
     tr.id = "linha-medida-" + grupo.nome.toLowerCase().replace(" ", "-") + "-" + tamanho;
     tr.innerHTML =
-      "<td>" + grupo.nome + "</td>" +
-      "<td>" + tamanho + "</td>" +
-      "<td>" + largura + " cm</td>" +
-      "<td>" + comprimento + " cm</td>";
+      '<td data-label="Modelagem">' + grupo.nome + "</td>" +
+      '<td data-label="Tamanho">' + tamanho + "</td>" +
+      '<td data-label="Largura">' + largura + " cm</td>" +
+      '<td data-label="Comprimento">' + comprimento + " cm</td>";
     corpo.appendChild(tr);
   }));
 }

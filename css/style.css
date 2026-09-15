@@ -561,7 +561,6 @@ a{ color: var(--azul); }
 
 .measures-table{
   width: 100%;
-  min-width: 560px;
   border-collapse: collapse;
   font-size: 0.96rem;
 }
@@ -932,7 +931,38 @@ a{ color: var(--azul); }
   .hero{ padding: 40px 0 56px; }
   .countdown{ max-width: none; }
   .section{ padding: 52px 0; }
-  .measures-table th, .measures-table td{ padding: 12px 10px; font-size: 0.88rem; }
+  .table-wrap{ overflow-x: hidden; }
+  .measures-table,
+  .measures-table tbody,
+  .measures-table tr,
+  .measures-table td{ display: block; }
+  .measures-table thead{ display: none; }
+  .measures-table tr{
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--borda);
+  }
+  .measures-table tbody tr:last-child{ border-bottom: none; }
+  .measures-table td{
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: baseline;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: none;
+    font-size: 0.84rem;
+    min-width: 0;
+    text-align: right;
+  }
+  .measures-table td::before{
+    content: attr(data-label);
+    color: var(--texto-suave);
+    font-weight: 700;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .measures-table tr[data-selected="true"] td:first-child::before{ display: none; }
   .lightbox-nav{ width: 38px; height: 38px; }
 }
 
