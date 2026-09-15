@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camisa EAC — Pedido oficial</title>
+<meta name="description" content="Formulário oficial de pedido da camisa do EAC. Escolha seu tamanho, confira as medidas e finalize seu pedido.">
+<link rel="icon" type="image/png" href="assets/logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#pedido">Pular para o formulário de pedido</a>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="brand">
+      <img src="assets/logo.png" alt="Símbolo do EAC" class="brand-mark" width="40" height="40">
+      <div class="brand-text">
+        <span class="brand-eyebrow">EAC</span>
+        <span class="brand-title">Pedido da Camisa</span>
+      </div>
+    </div>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a href="#camisa">A camisa</a>
+      <a href="#pedido">Fazer pedido</a>
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="hero-kicker">Coleção EAC · NOME_DO_EVENTO_AQUI</p>
+        <h1 id="hero-titulo">Camisa EAC</h1>
+        <p class="hero-desc" id="hero-descricao">
+          Uma peça pensada para representar comunidade, fé e juventude. Confira os detalhes,
+          escolha seu tamanho e garanta a sua.
+        </p>
+        <div class="hero-price" aria-label="Preço da camisa">
+          <span class="hero-price-label">Valor</span>
+          <span class="hero-price-value" id="hero-preco">R$ 0,00</span>
+        </div>
+        <a href="#pedido" class="btn btn-primary">Quero fazer o pedido</a>
+      </div>
+      <div class="hero-media">
+        <img src="assets/frente.png" alt="Camisa oficial do EAC, vista frontal" id="hero-imagem" loading="eager">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONHEÇA A CAMISA (3D / GALERIA) ============ -->
+  <section class="section" id="camisa">
+    <div class="wrap">
+      <h2 class="section-title">Conheça a camisa</h2>
+      <p class="section-lead">Explore os detalhes em 3D ou navegue pelas fotos em alta qualidade.</p>
+
+      <div class="viewer-card">
+        <div class="viewer-stage" id="viewer-stage">
+          <!-- Preenchido dinamicamente pelo app.js: canvas 3D, vídeo ou imagem -->
+          <div class="viewer-loading" id="viewer-loading">Carregando visualização…</div>
+        </div>
+
+        <div class="viewer-controls" id="viewer-controls" hidden>
+          <button type="button" class="viewer-btn" id="btn-girar" aria-label="Girar modelo">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14.9-4M20 12a8 8 0 0 1-14.9 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18 4v5h-5M6 20v-5h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Girar
+          </button>
+          <button type="button" class="viewer-btn" id="btn-zoom-in" aria-label="Aproximar">+ Zoom</button>
+          <button type="button" class="viewer-btn" id="btn-zoom-out" aria-label="Afastar">− Zoom</button>
+          <button type="button" class="viewer-btn" id="btn-tela-cheia" aria-label="Ver em tela cheia">Tela cheia</button>
+        </div>
+      </div>
+
+      <!-- Galeria -->
+      <div class="gallery" id="gallery">
+        <div class="gallery-main">
+          <img id="gallery-main-img" src="assets/camisa-frente.webp" alt="Camisa EAC, visão principal">
+          <button type="button" class="gallery-expand" id="gallery-expand" aria-label="Ampliar imagem">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="gallery-thumbs" id="gallery-thumbs" role="tablist" aria-label="Fotos da camisa"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LIGHTBOX ============ -->
+  <div class="lightbox" id="lightbox" hidden>
+    <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Fechar imagem ampliada">&times;</button>
+    <button type="button" class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Imagem anterior">&#10094;</button>
+    <img id="lightbox-img" src="" alt="">
+    <button type="button" class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Próxima imagem">&#10095;</button>
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+
+  <!-- ============ FORMULÁRIO ============ -->
+  <section class="section" id="pedido">
+    <div class="wrap wrap-narrow">
+      <h2 class="section-title">Faça seu pedido</h2>
+      <p class="section-lead">Preencha os dados abaixo. Revise tudo antes de confirmar.</p>
+      <form id="form-pedido" novalidate>
+
+        <div class="field">
+          <label for="input-nome">Nome completo</label>
+          <input type="text" id="input-nome" name="nome" autocomplete="name" required aria-describedby="erro-nome">
+          <p class="field-error" id="erro-nome" role="alert" hidden></p>
+        </div>
+
+        <!-- Campo livre para não expor uma lista pública de equipes. -->
+        <div class="field">
+          <label for="input-equipe">Equipe</label>
+          <input type="text" id="input-equipe" name="equipe" maxlength="60" autocomplete="off" placeholder="Código ou nome da equipe" required aria-describedby="erro-equipe">
+          <p class="field-error" id="erro-equipe" role="alert" hidden></p>
+        </div>
+
+        <fieldset class="field">
+          <legend>Tamanho</legend>
+          <div class="pill-group" id="tamanho-group" role="radiogroup" aria-describedby="erro-tamanho">
+            <!-- Preenchido pelo app.js a partir de CONFIG.tamanhos -->
+          </div>
+          <button type="button" class="measures-toggle" id="btn-medidas" aria-expanded="false" aria-controls="medidas">
+            Ver tabela de tamanhos
+          </button>
+          <div class="measures-panel" id="medidas" hidden>
+            <p class="measures-panel-title">Medidas da camisa</p>
+            <div class="table-wrap">
+              <table class="measures-table" id="measures-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Tamanho</th>
+                    <th scope="col">Largura</th>
+                    <th scope="col">Comprimento</th>
+                    <th scope="col">Manga</th>
+                  </tr>
+                </thead>
+                <tbody id="measures-body">
+                  <!-- Preenchido pelo app.js a partir de MEDIDAS -->
+                </tbody>
+              </table>
+            </div>
+            <p class="measures-note">As medidas podem apresentar pequenas variações.</p>
+          </div>
+          <p class="field-error" id="erro-tamanho" role="alert" hidden></p>
+        </fieldset>
+
+        <!-- Resumo dinâmico -->
+        <div class="summary-card" id="resumo-card" aria-live="polite">
+          <h3>Seu pedido</h3>
+          <dl class="summary-list">
+            <div><dt>Camisa</dt><dd id="resumo-produto">Camisa EAC</dd></div>
+            <div><dt>Tamanho</dt><dd id="resumo-tamanho">—</dd></div>
+            <div><dt>Equipe</dt><dd id="resumo-equipe">—</dd></div>
+            <div><dt>Nome</dt><dd id="resumo-nome">—</dd></div>
+          </dl>
+        </div>
+
+        <div class="form-message" id="form-message" role="alert" hidden></div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="btn-enviar">
+          <span id="btn-enviar-texto">Confirmar pedido</span>
+        </button>
+      </form>
+
+      <!-- Estado de sucesso -->
+      <div class="success-card" id="success-card" hidden>
+        <div class="success-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="28" height="28"><path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Pedido realizado com sucesso!</h3>
+        <p>Seu pedido foi registrado. Obrigado!</p>
+        <p class="success-id">Nº do pedido: <strong id="success-id">—</strong></p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>EAC SANTA ANA 2026</p>
+    <p class="footer-contact">
+      <a href="https://wa.me/5583981901168" target="_blank" rel="noopener noreferrer" aria-label="Conversar pelo WhatsApp: (83) 98190-1168">(83) 98190-1168</a>
+    </p>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>
