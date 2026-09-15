@@ -52,18 +52,18 @@ const CONFIG = {
 // Medidas fictícias por tamanho, em centímetros. Substitua pelas medidas reais.
 // As chaves precisam bater com os valores de CONFIG.tamanhos.
 const MEDIDAS = {
-  PP: { largura: 0, comprimento: 0},
-  P:  { largura: 56, comprimento: 70},
-  M:  { largura: 60, comprimento: 74},
-  G:  { largura: 64, comprimento: 76},
-  G1: { largura: 70, comprimento: 78}
+  PP: { largura: 51, comprimento: 65},
+  P:  { largura: 55, comprimento: 70},
+  M:  { largura: 58, comprimento: 72},
+  G:  { largura: 62, comprimento: 75},
+  G1: { largura: 68, comprimento: 77}
 };
 
 const MEDIDAS_BABY_LOOK = {
-  PP: { largura: 45, comprimento: 55 },
-  P:  { largura: 49, comprimento: 57 },
-  M:  { largura: 53, comprimento: 60 },
-  G:  { largura: 56, comprimento: 63 }
+  PP: { largura: 45, comprimento: 55},
+  P:  { largura: 49, comprimento: 57},
+  M:  { largura: 53, comprimento: 60},
+  G:  { largura: 56, comprimento: 63}
 };
 
 /* ==========================================================================
