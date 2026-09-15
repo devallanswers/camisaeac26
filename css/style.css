@@ -628,6 +628,8 @@ a{ color: var(--azul); }
   border: 1px solid var(--borda);
   border-radius: var(--radius-md);
   background: var(--fundo-claro);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .measures-panel-title{
@@ -650,6 +652,7 @@ a{ color: var(--azul); }
   margin-bottom: 28px;
   border: none;
   padding: 0;
+  min-width: 0;
 }
 
 .field label,
