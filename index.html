@@ -50,6 +50,27 @@
           <span class="hero-price-label">Valor</span>
           <span class="hero-price-value" id="hero-preco">R$ 0,00</span>
         </div>
+        <div class="countdown" id="countdown" aria-live="polite">
+          <p class="countdown-label">Pedidos até 30/09</p>
+          <div class="countdown-grid" aria-label="Tempo restante para fazer o pedido">
+            <div class="countdown-unit">
+              <strong id="countdown-dias">00</strong>
+              <span>Dias</span>
+            </div>
+            <div class="countdown-unit">
+              <strong id="countdown-horas">00</strong>
+              <span>Horas</span>
+            </div>
+            <div class="countdown-unit">
+              <strong id="countdown-minutos">00</strong>
+              <span>Minutos</span>
+            </div>
+            <div class="countdown-unit">
+              <strong id="countdown-segundos">00</strong>
+              <span>Segundos</span>
+            </div>
+          </div>
+        </div>
         <a href="#pedido" class="btn btn-primary">Quero fazer o pedido</a>
       </div>
       <div class="hero-media">
@@ -128,6 +149,10 @@
           <div class="pill-group" id="tamanho-group" role="radiogroup" aria-describedby="erro-tamanho">
             <!-- Preenchido pelo app.js a partir de CONFIG.tamanhos -->
           </div>
+          <p class="size-group-title">Baby look</p>
+          <div class="pill-group" id="tamanho-baby-look" role="radiogroup" aria-describedby="erro-tamanho">
+            <!-- Preenchido pelo app.js a partir de CONFIG.tamanhosBabyLook -->
+          </div>
           <button type="button" class="measures-toggle" id="btn-medidas" aria-expanded="false" aria-controls="medidas">
             Ver tabela de tamanhos
           </button>
@@ -137,10 +162,10 @@
               <table class="measures-table" id="measures-table">
                 <thead>
                   <tr>
+                    <th scope="col">Modelagem</th>
                     <th scope="col">Tamanho</th>
                     <th scope="col">Largura</th>
                     <th scope="col">Comprimento</th>
-                    <th scope="col">Manga</th>
                   </tr>
                 </thead>
                 <tbody id="measures-body">
@@ -171,6 +196,11 @@
         </button>
       </form>
 
+      <div class="closed-card" id="pedido-encerrado" hidden>
+        <h3>Pedidos encerrados</h3>
+        <p>O prazo para pedir a camisa terminou em 30/09.</p>
+      </div>
+
       <!-- Estado de sucesso -->
       <div class="success-card" id="success-card" hidden>
         <div class="success-icon" aria-hidden="true">
@@ -179,6 +209,9 @@
         <h3>Pedido realizado com sucesso!</h3>
         <p>Seu pedido foi registrado. Obrigado!</p>
         <p class="success-id">Nº do pedido: <strong id="success-id">—</strong></p>
+        <p class="success-notice">Caso queira fazer qualquer alteração, informe ao coordenador.</p>
+        <p class="success-notice">O pagamento da blusa deve ser feito diretamente aos coordenadores até o dia 01/11.</p>
+        <button type="button" class="btn btn-primary" id="btn-novo-pedido">Pedir novamente</button>
       </div>
     </div>
   </section>

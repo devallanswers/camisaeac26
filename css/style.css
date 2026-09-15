@@ -215,6 +215,56 @@ a{ color: var(--azul); }
   color: var(--dourado);
 }
 
+.countdown{
+  margin: 0 0 28px;
+  max-width: 430px;
+}
+
+.countdown-label{
+  margin: 0 0 10px;
+  color: rgba(255,255,255,0.76);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.countdown-grid{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.countdown-unit{
+  min-width: 0;
+  padding: 10px 8px 9px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-sm);
+  background: rgba(4,18,47,0.34);
+  text-align: center;
+}
+
+.countdown-unit strong{
+  display: block;
+  color: var(--branco);
+  font-family: var(--fonte-titulo);
+  font-size: 1.35rem;
+  line-height: 1.1;
+}
+
+.countdown-unit span{
+  display: block;
+  margin-top: 4px;
+  color: rgba(255,255,255,0.68);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.countdown-closed .countdown-unit{
+  opacity: 0.56;
+}
+
 .hero-media{
   background: rgba(255,255,255,0.92);
   border-radius: var(--radius-lg);
@@ -584,6 +634,14 @@ a{ color: var(--azul); }
   color: var(--azul-escuro);
 }
 
+.size-group-title{
+  margin-top: 24px;
+  margin-bottom: 10px;
+  font-family: var(--fonte-titulo);
+  font-weight: 800;
+  color: var(--texto);
+}
+
 /* ============ FORM ============ */
 .field{
   margin-bottom: 28px;
@@ -698,7 +756,8 @@ a{ color: var(--azul); }
   margin-bottom: 0;
 }
 
-#tamanho-group .pill-label{
+#tamanho-group .pill-label,
+#tamanho-baby-look .pill-label{
   width: 64px;
   height: 46px;
   min-width: 64px;
@@ -779,6 +838,18 @@ a{ color: var(--azul); }
   margin-top: 24px;
 }
 
+.closed-card{
+  text-align: center;
+  padding: 42px 24px;
+  background: var(--fundo-claro);
+  border: 1px solid var(--borda);
+  border-radius: var(--radius-lg);
+  margin-top: 24px;
+}
+
+.closed-card h3{ margin-bottom: 6px; }
+.closed-card p{ color: var(--texto-suave); margin-bottom: 0; }
+
 .success-icon{
   width: 56px;
   height: 56px;
@@ -794,6 +865,15 @@ a{ color: var(--azul); }
 .success-card h3{ margin-bottom: 6px; }
 
 .success-id{ color: var(--texto-suave); font-size: 0.92rem; margin-top: 10px; }
+
+.success-notice{
+  max-width: 52ch;
+  margin: 12px auto 0;
+  color: var(--texto-suave);
+  font-size: 0.92rem;
+}
+
+.success-card .btn{ margin-top: 20px; }
 
 .btn-primary{
   position: relative;
@@ -844,6 +924,7 @@ a{ color: var(--azul); }
   .site-nav{ gap: 16px; }
   .site-nav a{ font-size: 0.85rem; }
   .hero{ padding: 40px 0 56px; }
+  .countdown{ max-width: none; }
   .section{ padding: 52px 0; }
   .measures-table th, .measures-table td{ padding: 12px 10px; font-size: 0.88rem; }
   .lightbox-nav{ width: 38px; height: 38px; }

@@ -21,9 +21,11 @@ const CONFIG = {
   nomeEvento: "EAC 2026",
   descricao:
     "Uma peça pensada para representar comunidade, fé e juventude. Confira os detalhes, escolha seu tamanho e garanta a sua.",
+  prazoPedidos: "2026-09-30T23:59:59-03:00",
 
   // Tamanhos disponíveis, na ordem em que devem aparecer.
-  tamanhos: ["PP", "P", "M", "G", "GG", "XG"],
+  tamanhos: ["PP", "P", "M", "G", "G1"],
+  tamanhosBabyLook: ["PP", "P", "M", "G"],
 
   // Formas de pagamento disponíveis.
   // URL do Web App do Google Apps Script (gerada após a implantação — ver README).
@@ -50,12 +52,18 @@ const CONFIG = {
 // Medidas fictícias por tamanho, em centímetros. Substitua pelas medidas reais.
 // As chaves precisam bater com os valores de CONFIG.tamanhos.
 const MEDIDAS = {
-  PP: { largura: 48, comprimento: 68, manga: 20 },
-  P:  { largura: 50, comprimento: 70, manga: 21 },
-  M:  { largura: 52, comprimento: 72, manga: 22 },
-  G:  { largura: 54, comprimento: 74, manga: 23 },
-  GG: { largura: 56, comprimento: 76, manga: 24 },
-  XG: { largura: 58, comprimento: 78, manga: 25 }
+  PP: { largura: 0, comprimento: 0},
+  P:  { largura: 56, comprimento: 70},
+  M:  { largura: 60, comprimento: 74},
+  G:  { largura: 64, comprimento: 76},
+  G1: { largura: 70, comprimento: 78}
+};
+
+const MEDIDAS_BABY_LOOK = {
+  PP: { largura: 45, comprimento: 55 },
+  P:  { largura: 49, comprimento: 57 },
+  M:  { largura: 53, comprimento: 60 },
+  G:  { largura: 56, comprimento: 63 }
 };
 
 /* ==========================================================================
@@ -69,8 +77,60 @@ function formatarMoeda(valor, moeda) {
   }
 }
 
+function iniciarContagemRegressiva() {
+  const countdown = document.getElementById("countdown");
+  if (!countdown) return;
+
+  const unidades = {
+    dias: document.getElementById("countdown-dias"),
+    horas: document.getElementById("countdown-horas"),
+    minutos: document.getElementById("countdown-minutos"),
+    segundos: document.getElementById("countdown-segundos")
+  };
+  const prazo = new Date(CONFIG.prazoPedidos).getTime();
+  let intervalo;
+
+  function atualizar() {
+    const restante = Math.max(0, prazo - Date.now());
+    const totalSegundos = Math.floor(restante / 1000);
+    const dias = Math.floor(totalSegundos / 86400);
+    const horas = Math.floor((totalSegundos % 86400) / 3600);
+    const minutos = Math.floor((totalSegundos % 3600) / 60);
+    const segundos = totalSegundos % 60;
+
+    unidades.dias.textContent = String(dias).padStart(2, "0");
+    unidades.horas.textContent = String(horas).padStart(2, "0");
+    unidades.minutos.textContent = String(minutos).padStart(2, "0");
+    unidades.segundos.textContent = String(segundos).padStart(2, "0");
+
+    if (restante <= 0) {
+      countdown.classList.add("countdown-closed");
+      countdown.querySelector(".countdown-label").textContent = "Pedidos encerrados";
+      encerrarPedidos();
+      clearInterval(intervalo);
+    }
+  }
+
+  atualizar();
+  intervalo = setInterval(atualizar, 1000);
+}
+
+function pedidosAbertos() {
+  return Date.now() < new Date(CONFIG.prazoPedidos).getTime();
+}
+
+function encerrarPedidos() {
+  const form = document.getElementById("form-pedido");
+  const aviso = document.getElementById("pedido-encerrado");
+  if (!form || !aviso) return;
+
+  form.hidden = true;
+  aviso.hidden = false;
+}
+
 const state = {
   tamanhoSelecionado: null,
+  modelagemSelecionada: null,
   galeriaIndex: 0,
   enviando: false
 };
@@ -93,7 +153,8 @@ function iniciarConteudoEstatico() {
 
   montarGaleria();
   montarTabelaMedidas();
-  montarPills("tamanho-group", "tamanho", CONFIG.tamanhos, selecionarTamanho);
+  montarPills("tamanho-group", "tamanho", CONFIG.tamanhos, (tamanho) => selecionarTamanho(tamanho, "Tradicional", "tamanho"));
+  montarPills("tamanho-baby-look", "baby-look", CONFIG.tamanhosBabyLook, (tamanho) => selecionarTamanho(tamanho, "Baby look", "baby-look"));
   preencherEquipePelaUrl();
 }
 
@@ -137,22 +198,30 @@ function montarPills(containerId, name, opcoes, onChange) {
 function montarTabelaMedidas() {
   const corpo = document.getElementById("measures-body");
   corpo.innerHTML = "";
-  CONFIG.tamanhos.forEach((tamanho) => {
-    const m = MEDIDAS[tamanho] || { largura: "—", comprimento: "—", manga: "—" };
+  const grupos = [
+    { nome: "Tradicional", tamanhos: CONFIG.tamanhos, medidas: MEDIDAS },
+    { nome: "Baby look", tamanhos: CONFIG.tamanhosBabyLook, medidas: MEDIDAS_BABY_LOOK }
+  ];
+
+  grupos.forEach((grupo) => grupo.tamanhos.forEach((tamanho) => {
+    const m = grupo.medidas[tamanho] || {};
+    const largura = m.largura ?? "—";
+    const comprimento = m.comprimento ?? "—";
     const tr = document.createElement("tr");
-    tr.id = "linha-medida-" + tamanho;
+    tr.id = "linha-medida-" + grupo.nome.toLowerCase().replace(" ", "-") + "-" + tamanho;
     tr.innerHTML =
+      "<td>" + grupo.nome + "</td>" +
       "<td>" + tamanho + "</td>" +
-      "<td>" + m.largura + " cm</td>" +
-      "<td>" + m.comprimento + " cm</td>" +
-      "<td>" + m.manga + " cm</td>";
+      "<td>" + largura + " cm</td>" +
+      "<td>" + comprimento + " cm</td>";
     corpo.appendChild(tr);
-  });
+  }));
 }
 
-function destacarLinhaMedida(tamanho) {
+function destacarLinhaMedida(tamanho, modelagem) {
   document.querySelectorAll("#measures-body tr").forEach((tr) => tr.removeAttribute("data-selected"));
-  const linha = document.getElementById("linha-medida-" + tamanho);
+  const grupo = modelagem.toLowerCase().replace(" ", "-");
+  const linha = document.getElementById("linha-medida-" + grupo + "-" + tamanho);
   if (linha) {
     linha.setAttribute("data-selected", "true");
   }
@@ -379,10 +448,14 @@ function solicitarTelaCheia(elemento) {
 /* ==========================================================================
    6. FORMULÁRIO — seleção, validação, resumo e envio
    ========================================================================== */
-function selecionarTamanho(tamanho) {
+function selecionarTamanho(tamanho, modelagem, grupo) {
   state.tamanhoSelecionado = tamanho;
+  state.modelagemSelecionada = modelagem;
+  document.querySelectorAll("#tamanho-group input, #tamanho-baby-look input").forEach((input) => {
+    if (input.name !== grupo) input.checked = false;
+  });
   document.getElementById("erro-tamanho").hidden = true;
-  destacarLinhaMedida(tamanho);
+  destacarLinhaMedida(tamanho, modelagem);
   atualizarResumo();
 }
 
@@ -390,7 +463,9 @@ function atualizarResumo() {
   const nome = document.getElementById("input-nome").value.trim();
   const equipe = document.getElementById("input-equipe").value.trim();
   document.getElementById("resumo-nome").textContent = nome || "—";
-  document.getElementById("resumo-tamanho").textContent = state.tamanhoSelecionado || "—";
+  document.getElementById("resumo-tamanho").textContent = state.tamanhoSelecionado
+    ? state.modelagemSelecionada + " — " + state.tamanhoSelecionado
+    : "—";
   document.getElementById("resumo-equipe").textContent = equipe || "—";
 }
 
@@ -474,6 +549,29 @@ function iniciarFormulario() {
   const form = document.getElementById("form-pedido");
   const botao = document.getElementById("btn-enviar");
   const textoBotao = document.getElementById("btn-enviar-texto");
+  const successCard = document.getElementById("success-card");
+
+  document.getElementById("btn-novo-pedido").addEventListener("click", () => {
+    form.reset();
+    form.hidden = false;
+    successCard.hidden = true;
+    state.tamanhoSelecionado = null;
+    state.modelagemSelecionada = null;
+    state.enviando = false;
+    document.querySelectorAll("#tamanho-group input, #tamanho-baby-look input").forEach((input) => {
+      input.checked = false;
+    });
+    document.querySelectorAll(".field-error").forEach((erro) => {
+      erro.hidden = true;
+      erro.textContent = "";
+    });
+    document.querySelectorAll(".field input").forEach((input) => input.classList.remove("invalid"));
+    botao.disabled = false;
+    textoBotao.textContent = "Confirmar pedido";
+    document.getElementById("resumo-produto").textContent = CONFIG.nomeProduto;
+    atualizarResumo();
+    form.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 
   document.getElementById("input-nome").addEventListener("input", atualizarResumo);
   document.getElementById("input-equipe").addEventListener("input", atualizarResumo);
@@ -481,6 +579,11 @@ function iniciarFormulario() {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     ocultarMensagemFormulario();
+
+    if (!pedidosAbertos()) {
+      encerrarPedidos();
+      return;
+    }
 
     if (state.enviando) return; // evita duplo clique / duplo envio
     if (!validarFormulario()) return;
@@ -493,6 +596,7 @@ function iniciarFormulario() {
       nome: document.getElementById("input-nome").value.trim(),
       equipe: document.getElementById("input-equipe").value.trim(),
       tamanho: state.tamanhoSelecionado,
+      modelagem: state.modelagemSelecionada,
       moeda: CONFIG.moeda
     };
 
@@ -504,7 +608,6 @@ function iniciarFormulario() {
       const resultado = await enviarPedido(payload);
 
       form.hidden = true;
-      const successCard = document.getElementById("success-card");
       successCard.hidden = false;
       document.getElementById("success-id").textContent = resultado.id || "—";
       successCard.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -523,6 +626,7 @@ function iniciarFormulario() {
    ========================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
   iniciarConteudoEstatico();
+  iniciarContagemRegressiva();
   iniciarTabelaMedidas();
   iniciarLightbox();
   iniciarFormulario();
