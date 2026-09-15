@@ -555,10 +555,13 @@ a{ color: var(--azul); }
   border-radius: var(--radius-lg);
   box-shadow: var(--sombra);
   overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .measures-table{
   width: 100%;
+  min-width: 560px;
   border-collapse: collapse;
   font-size: 0.96rem;
 }
